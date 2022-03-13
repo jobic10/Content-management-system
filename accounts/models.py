@@ -50,23 +50,6 @@ class Order(models.Model):
     def __str__(self):
         return self.product.name
 
-
-class House(models.Model):
-    buyer_id=models.IntegerField(primary_key=True)
-    house_id=models.CharField(max_length=10)
-    
-    class Meta:
-        db_table='tbl_house'
-
-    def __str__(self):
-        return self.house_id
-
-class Price(models.Model):
-    house_id=models.ForeignKey(House,on_delete=models.CASCADE)
-    price=models.IntegerField()
-
-    class Meta:
-        db_table='tbl_price'
     
 
 
