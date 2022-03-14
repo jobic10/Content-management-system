@@ -5,6 +5,7 @@ from django.db import models
 # Create your models here.
 class Customer(models.Model):
     name=models.CharField(max_length=200,null=True)
+    surname=models.CharField(max_length=200,null=True)
     email=models.CharField(max_length=200,null=True)
     date_created=models.DateTimeField(auto_now_add=True)
     phone=models.CharField(max_length=100,null=True)
@@ -44,6 +45,7 @@ class Order(models.Model):
     )
     customer=models.ForeignKey(Customer,on_delete=models.CASCADE,null=True)
     product=models.ForeignKey(Product,on_delete=models.CASCADE,null=True)
+    note=models.CharField(max_length=200,null=True)
     date_created=models.DateTimeField(auto_now_add=True,null=True)
     status=models.CharField(max_length=100,null=True,choices=STATUS)
 

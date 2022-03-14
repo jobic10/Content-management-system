@@ -4,6 +4,7 @@ from django.shortcuts import redirect, render
 from .models import *
 from .forms import *
 from random import randint
+from .filters import OrderFilter
 
 
 # Create your views here.
@@ -33,14 +34,19 @@ def customer(request,pk_id):
         customer=Customer.objects.get(id=pk_id)
         orders=customer.order_set.all()      #what does it do
         total_orders=orders.count()
+        myFilter=OrderFilter(request.GET,queryset=orders)
+        orders=myFilter.qs
     except:
         customer={}
         orders={}
+        myFilter={}
         total_orders=""
+
     context={
         'customer':customer,
         'orders':orders,
-        'total_orders':total_orders
+        'total_orders':total_orders,
+        'myFilter':myFilter,
     }
     
     
