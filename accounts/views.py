@@ -5,6 +5,7 @@ from .models import *
 from .forms import *
 from random import randint
 from .filters import OrderFilter
+from django.contrib.auth.forms import UserCreationForm
 
 
 # Create your views here.
@@ -101,6 +102,23 @@ def deleteOrder(request,pk):
         'item':order
     }
     return render(request,'delete.html',context)
+
+def login(request):
+    context={}
+    return render(request,'login.html',context)
+
+def register(request):
+    form=CreateUserForm()
+    if request.method=='POST':
+        form=CreateUserForm(request.POST)
+        if form.is_valid():
+            form.save
+
+   
+    context={
+        'form':form
+    }
+    return render(request,'register.html',context)
 
 
 

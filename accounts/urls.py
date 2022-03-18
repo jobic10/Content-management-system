@@ -15,6 +15,7 @@ Including another URLconf
 """
 from . import views
 from django.urls import path
+from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [   
     path('',views.dashboard,name='dashboard'),
@@ -23,4 +24,6 @@ urlpatterns = [
     path('order_form/<int:pk>/',views.orderform,name='orderform'),
     path('updates/<int:pk>/',views.updates,name='updates'),
     path('delete/<int:pk>/',views.deleteOrder,name='delete'),
+    path('login/',views.login,name='login'),
+    path('register/',views.register,name='register'),
 ]
