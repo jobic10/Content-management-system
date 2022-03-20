@@ -19,7 +19,7 @@ class Create_Order(ModelForm):
         model=Order
         fields='__all__'
 
-class CreateUserForm(FormSetting):
+class CustomUserForm(FormSetting):
 
     email=forms.EmailField(required=True)
     password=forms.CharField(widget=forms.PasswordInput)
@@ -29,12 +29,12 @@ class CreateUserForm(FormSetting):
 
 
     def __inti__(self, *args, **kwargs):
-        super(CreateUserForm,self).__init__(*args,**kwargs)
+        super(CustomUserForm,self).__init__(*args,**kwargs)
         if kwargs.get('instance'):
             instance=kwargs.get('instance').__dict__
             self.fields['password'].required=False
             
-            for field in CreateUserForm.Meta.fields:
+            for field in CustomUserForm.Meta.fields:
                 self.fields[field].initial=instance.get(field)
             if self.instance.pk is not None:
                 self.fields['password'].widget.attrs['placeholder']= "Enter your Password"
@@ -43,7 +43,7 @@ class CreateUserForm(FormSetting):
                 self.fields['last_name'].required=True
 
     def clean_email(self, *args, **kwargs):
-        FormEmail=self.clean_email['email'].lower()
+        FormEmail=self.cleaned_data['email'].lower()
         if self.instance.pk is None:            #insert
             if CustomUser.objects.filter(email=FormEmail).exits():
                 raise forms.ValidationError('The Given mail is already registered')

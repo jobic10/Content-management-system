@@ -1,3 +1,4 @@
+from email import message
 from telnetlib import STATUS
 from django.forms import inlineformset_factory
 from django.shortcuts import redirect, render
@@ -6,6 +7,10 @@ from .forms import *
 from random import randint
 from .filters import OrderFilter
 from django.contrib.auth.forms import UserCreationForm
+from .email_backend import EmailBackend
+from django.contrib import messages
+from django.contrib.auth import logout,login
+
 
 
 # Create your views here.
@@ -103,20 +108,54 @@ def deleteOrder(request,pk):
     }
     return render(request,'delete.html',context)
 
-def login(request):
+def account_login(request):
+    if request.user.is_authenticated:
+        if request.user.user_type=='1':
+            return redirect('dashboard')
+
+    if request.method=="POST":
+        user=EmailBackend.authenticate(request,username=request.POST.get('email'),password=request.POST.get('password'))
+        if user!=None:
+            login(request,user)
+            if user.user_type == '1':
+                return redirect('dashboard')
+
+        else:
+            messages.error(request,'Invalid Login Parameters')
+            return redirect('/')
+        
     context={}
     return render(request,'login.html',context)
 
+def account_logout(request):
+    if request.user.is_authenticated:
+        logout(request)
+        messages.success(request,"Thanks for Checking on CMS Goodbye!!")
+        return redirect('login')
+
+    else:
+        messages.error(request,"You need to Login to be able to accsss this Software")
+        return redirect('login')
+    
+
+
+
 def register(request):
-    form=CreateUserForm()
+    userForm=CustomUserForm(request.POST or None)
     if request.method=='POST':
-        form=CreateUserForm(request.POST)
-        if form.is_valid():
-            form.save
+        if userForm.is_valid():
+            user=userForm.save(commit=False)
+            user.cms=user
+            user.save()
+            messages.success(request,'Account Created Successfully.You can now login')
+            return redirect('login')
+        else:
+            messages.error(request,"Provided data Failed Validation")
+    
 
    
     context={
-        'form':form
+        'form':userForm
     }
     return render(request,'register.html',context)
 
