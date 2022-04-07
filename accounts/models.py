@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from itertools import product
 from django.db import models
 from django.contrib.auth.hashers import make_password 
@@ -37,7 +38,7 @@ class CustomUser(AbstractUser):
     USER_TYPE=((1,'Admin'),(2,'cms'))
     username=None #use email instead of username
     email=models.EmailField(unique=True)
-    user_type=models.CharField(default=2,choices=USER_TYPE,max_length=1)
+    user_type=models.CharField(default=1,choices=USER_TYPE,max_length=1)
     created_at=models.DateTimeField(auto_now_add=True)
     updated_at=models.DateTimeField(auto_now_add=True)
     USERNAME_FIELD ='email'
@@ -48,6 +49,7 @@ class CustomUser(AbstractUser):
         return self.last_name + '' + self.first_name
 
 class Customer(models.Model):
+    profile=models.ImageField(null=True,blank=True)
     name=models.CharField(max_length=200,null=True)
     surname=models.CharField(max_length=200,null=True)
     email=models.CharField(max_length=200,null=True)
@@ -87,8 +89,8 @@ class Order(models.Model):
         ('Pending','Pending'),
         ('Out for Delivery','Out for Delivery')
     )
-    customer=models.ForeignKey(Customer,on_delete=models.CASCADE,null=True)
-    product=models.ForeignKey(Product,on_delete=models.CASCADE,null=True)
+    customer=models.ForeignKey(Customer,on_delete=models.CASCADE)
+    product=models.ForeignKey(Product,on_delete=models.CASCADE)
     note=models.CharField(max_length=200,null=True)
     date_created=models.DateTimeField(auto_now_add=True,null=True)
     status=models.CharField(max_length=100,null=True,choices=STATUS)

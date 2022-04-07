@@ -13,6 +13,11 @@
 
     <!-- Main css -->
     <link rel="stylesheet" href="{% static '/static/css/style.css'%}">
+    <style>
+    .errormsg{
+        color:red
+    }
+    </style>
     </head>
     <body>
        <section class="sign-in">
@@ -42,6 +47,11 @@
                             <div class="form-group form-button">
                                 <input type="submit" name="signin" id="signin" class="form-submit" value="Log in"/>
                             </div>
+                            {% if messages %}
+                            {% for message in messages %}
+                            <p class= 'errormsg' >{{ message}}</p>
+                            {% endfor %}
+                            {% endif %}
                         </form>
                         <div class="social-login">
                             <span class="social-label">Or login with</span>

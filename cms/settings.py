@@ -28,8 +28,6 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 AUTH_USER_MODEL='accounts.CustomUser'
-AUTHENTICATION_BACKENDS=['accounts.email_backend.EmailBackend']
-
 
 # Application definition
 
@@ -52,6 +50,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+
+    #My middleware customization
+    # 'accounts.filter_ip_middleware.FilterIpMiddleware',
 ]
 
 ROOT_URLCONF = 'cms.urls'
