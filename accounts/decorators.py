@@ -9,7 +9,7 @@ def unauthenticated(view_func):
             if request.user.user_type=='1':
                 return redirect('dashboard')
             if request.user.user_type=='2':
-                return redirect('dashboard')
+                return redirect('cms')
         else:
             return view_func(request,*args,**kwargs)
     return wrapper
